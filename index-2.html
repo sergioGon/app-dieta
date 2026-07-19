@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi plato saludable</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF8F2; --ink:#25291F; --muted:#6A6F5D;
+    --olive:#4E5B31; --olive-soft:#EDEFE2;
+    --saffron:#C9932F; --saffron-soft:#F7EDD6;
+    --terra:#A64B33; --terra-soft:#F5E4DC;
+    --plum:#7A5083; --plum-soft:#EFE6F1;
+    --line:#E4E0D0; --radius:16px;
+    --shadow:0 1px 2px rgba(37,41,31,.06), 0 6px 20px rgba(37,41,31,.06);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"DM Sans",system-ui,sans-serif; line-height:1.5;
+    font-size:17px; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:560px; margin:0 auto; padding:24px 16px 90px;}
+
+  h1{font-family:"Fraunces",serif; font-weight:900; font-size:1.9rem; line-height:1.05; margin:0 0 6px;}
+  h1 em{font-style:italic; color:var(--olive);}
+  .lede{color:var(--muted); font-size:.98rem; margin:0 0 18px;}
+
+  /* ------ Tabs nav ------ */
+  .tabs{
+    position:sticky; top:0; z-index:20; background:var(--paper);
+    display:flex; gap:6px; padding:10px 0 12px; overflow-x:auto;
+    -webkit-overflow-scrolling:touch; scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    flex-shrink:0; border:1.5px solid var(--line); background:#fff;
+    border-radius:999px; padding:9px 16px; font:inherit; font-size:.92rem;
+    font-weight:700; color:var(--muted); cursor:pointer;
+  }
+  .tab.on{background:var(--olive); border-color:var(--olive); color:#fff;}
+
+  .panel{display:none;}
+  .panel.on{display:block; animation:fade .18s ease;}
+  @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;}}
+
+  /* ------ Step cards ------ */
+  .step{background:#fff; border-radius:var(--radius); box-shadow:var(--shadow); padding:16px; margin-bottom:14px;}
+  .step-head{display:flex; align-items:center; gap:10px; margin-bottom:4px;}
+  .badge{
+    width:28px; height:28px; border-radius:50%; color:#fff; font-weight:700;
+    display:flex; align-items:center; justify-content:center; font-size:.95rem; flex-shrink:0;
+  }
+  .step h2{font-family:"Fraunces",serif; font-weight:600; font-size:1.15rem; margin:0;}
+  .step .sub{font-size:.85rem; color:var(--muted); margin:0 0 12px 38px;}
+
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{
+    border:1.5px solid var(--line); background:#fff; border-radius:12px;
+    padding:10px 13px; font:inherit; font-size:.95rem; font-weight:500;
+    cursor:pointer; color:var(--ink); text-align:left; line-height:1.25;
+  }
+  .chip small{display:block; font-size:.76rem; color:var(--muted); font-weight:400;}
+  .chip .st{color:var(--saffron); font-weight:700;}
+
+  .s-carb .badge{background:var(--saffron);}
+  .s-prot .badge{background:var(--terra);}
+  .s-comp .badge{background:var(--plum);}
+  .s-carb .chip.sel{background:var(--saffron-soft); border-color:var(--saffron); color:#8A6414;}
+  .s-prot .chip.sel{background:var(--terra-soft); border-color:var(--terra); color:var(--terra);}
+  .s-comp .chip.sel{background:var(--plum-soft); border-color:var(--plum); color:var(--plum);}
+  .chip.sel small{color:inherit; opacity:.75;}
+
+  .veg-note{
+    display:flex; gap:10px; align-items:center; background:var(--olive-soft);
+    border-radius:var(--radius); padding:13px 15px; margin-bottom:14px;
+    font-size:.92rem; color:var(--olive); font-weight:500;
+  }
+  .veg-note .dot{font-size:1.3rem; line-height:1;}
+
+  /* ------ Day toggle ------ */
+  .daytoggle{display:flex; gap:8px; margin-bottom:8px;}
+  .dayhint{
+    background:var(--saffron-soft); border-radius:12px; padding:11px 14px;
+    font-size:.9rem; color:#8A6414; margin:0 0 14px;
+  }
+  .dayhint.flash{animation:pulse .35s ease;}
+  @keyframes pulse{0%{transform:scale(.97); opacity:.5;} 100%{transform:none; opacity:1;}}
+
+  .chip[data-heavy]::after{content:""; display:none;}
+  .cena .chip[data-heavy]::after{
+    content:"☀️ mejor a mediodía"; display:block;
+    font-size:.72rem; color:var(--muted); margin-top:2px;
+  }
+  .daytoggle button{
+    flex:1; border:1.5px solid var(--line); background:#fff; border-radius:12px;
+    padding:11px 8px; font:inherit; font-size:.88rem; font-weight:700; color:var(--muted); cursor:pointer;
+  }
+  .daytoggle button.on{background:var(--olive); border-color:var(--olive); color:#fff;}
+
+  /* ------ Result bar ------ */
+  .result{
+    position:fixed; left:0; right:0; bottom:0; z-index:30;
+    background:var(--ink); color:#fff; padding:13px 16px calc(13px + env(safe-area-inset-bottom));
+  }
+  .result .in{max-width:560px; margin:0 auto;}
+  .result .t{font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:#C9C4AE; margin-bottom:2px;}
+  .result .plate-line{font-size:.98rem; font-weight:700; line-height:1.3;}
+  .result .tip{font-size:.8rem; color:#C9C4AE; margin-top:2px;}
+
+  /* ------ Generic content blocks ------ */
+  .card{background:#fff; border-radius:var(--radius); box-shadow:var(--shadow); padding:16px; margin-bottom:14px;}
+  .card h3{font-family:"Fraunces",serif; font-weight:600; font-size:1.1rem; margin:0 0 8px; color:var(--olive);}
+  .card p{margin:0 0 8px; font-size:.95rem;}
+  .card p:last-child{margin-bottom:0;}
+  .card ul{margin:0; padding-left:18px; font-size:.95rem;}
+  .card li{margin-bottom:8px;}
+  .card li:last-child{margin-bottom:0;}
+  .card li b{color:var(--ink);}
+  .card .mut{color:var(--muted);}
+
+  .daycard{border-left:4px solid var(--olive);}
+  .daycard .tag{font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--saffron); font-weight:700;}
+  .daycard p{margin:6px 0 0; font-size:.93rem;}
+  .daycard p b{color:var(--olive);}
+
+  .treat{border-left:4px solid var(--saffron);}
+  .treat h3{color:var(--saffron);}
+
+  .legend{font-size:.83rem; color:var(--muted); margin:2px 0 14px;}
+  .legend .st{color:var(--saffron); font-weight:700;}
+
+  .disclaimer{margin-top:18px; padding:13px 15px; border:1.5px dashed var(--line); border-radius:var(--radius); font-size:.8rem; color:var(--muted);}
+
+  .reset{
+    display:block; width:100%; margin-top:4px; border:none; background:none;
+    color:var(--muted); font:inherit; font-size:.85rem; text-decoration:underline; cursor:pointer; padding:8px;
+  }
+
+  @media(min-width:600px){
+    body{font-size:16.5px;}
+    h1{font-size:2.4rem;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .panel.on{animation:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Mi plato <em>saludable</em></h1>
+  <p class="lede">Toca una opción de cada paso y abajo verás tu plato montado. Cualquier combinación es sana y adecuada para ti.</p>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab on" data-p="montar">🍽️ Montar comida o cena</button>
+    <button class="tab" data-p="dias">📅 Ideas por día</button>
+    <button class="tab" data-p="desayuno">☕ Desayuno</button>
+    <button class="tab" data-p="snacks">🍎 Snacks</button>
+    <button class="tab" data-p="caprichos">🍕 Caprichos</button>
+    <button class="tab" data-p="notas">📋 Mis notas</button>
+  </nav>
+
+  <!-- ================= MONTAR PLATO ================= -->
+  <section class="panel on" id="p-montar">
+
+    <div class="daytoggle" id="mealtoggle">
+      <button class="on" data-m="comida">☀️ Comida</button>
+      <button data-m="cena">🌙 Cena</button>
+    </div>
+
+    <div class="daytoggle" id="daytoggle">
+      <button class="on" data-d="fuerte">💪 Hoy: natación o pesas</button>
+      <button data-d="suave">💃 Hoy: sevillanas o descanso</button>
+    </div>
+    <p class="dayhint" id="dayhint">Día de deporte fuerte: hoy la ración de hidrato puede ser <b>más generosa</b>. 💪</p>
+
+    <div class="veg-note"><span class="dot">🥗</span><span>La base de siempre: <b>medio plato de verdura</b> (ensalada o cocida) y aceite de oliva virgen extra.</span></div>
+
+    <div class="step s-carb">
+      <div class="step-head"><span class="badge">1</span><h2>Elige tu hidrato</h2></div>
+      <p class="sub">La energía del plato · los ★ ayudan más con el colesterol</p>
+      <div class="chips" data-group="carb">
+        <button class="chip" data-heavy="1"><span class="st">★</span> Legumbres<small>lentejas, garbanzos, alubias</small></button>
+        <button class="chip"><span class="st">★</span> Avena</button>
+        <button class="chip" data-heavy="1">Arroz integral</button>
+        <button class="chip" data-heavy="1">Pasta integral</button>
+        <button class="chip">Quinoa</button>
+        <button class="chip">Patata o boniato<small>cocido o al horno</small></button>
+        <button class="chip">Pan integral<small>1 rebanada</small></button>
+      </div>
+    </div>
+
+    <div class="step s-prot">
+      <div class="step-head"><span class="badge">2</span><h2>Elige tu proteína</h2></div>
+      <p class="sub">Para el músculo y la saciedad</p>
+      <div class="chips" data-group="prot">
+        <button class="chip"><span class="st">★</span> Pescado azul<small>salmón, sardina, caballa</small></button>
+        <button class="chip">Pescado blanco<small>merluza, lubina, dorada</small></button>
+        <button class="chip"><span class="st">★</span> Legumbres<small>si no las usaste en el paso 1</small></button>
+        <button class="chip">Huevo<small>duro o en tortilla</small></button>
+        <button class="chip">Pollo o pavo<small>sin piel</small></button>
+        <button class="chip">Conejo</button>
+        <button class="chip">Ternera magra<small>máx. 1 vez por semana</small></button>
+        <button class="chip">Fiambre en lonchas<small>jamón cocido, pavo o pollo · buena calidad, bajo en sal</small></button>
+        <button class="chip">Tofu<small>con moderación</small></button>
+        <button class="chip">Marisco<small>de vez en cuando</small></button>
+      </div>
+    </div>
+
+    <div class="step s-comp">
+      <div class="step-head"><span class="badge">3</span><h2>Remata (opcional)</h2></div>
+      <p class="sub">De postre o dentro del plato</p>
+      <div class="chips" data-group="comp">
+        <button class="chip"><span class="st">★</span> Fruta fresca</button>
+        <button class="chip"><span class="st">★</span> Nueces<small>un puñado, sin sal</small></button>
+        <button class="chip">Yogur natural o kéfir<small>sin azucarar</small></button>
+        <button class="chip">Queso fresco o requesón</button>
+        <button class="chip">Almendras o avellanas<small>un puñado</small></button>
+      </div>
+      <button class="reset" id="reset">Empezar de nuevo</button>
+    </div>
+
+  </section>
+
+  <!-- ================= IDEAS POR DÍA ================= -->
+  <section class="panel" id="p-dias">
+    <p class="legend">Regla fácil: <b>comida completa</b> con su hidrato, <b>cena más ligera</b> y sin repetir la proteína del mediodía. Verdura en las dos.</p>
+
+    <div class="card daycard">
+      <span class="tag">💪 Día de pesas</span>
+      <p><b>Comida ·</b> verdura + arroz integral + salmón al horno + fruta</p>
+      <p><b>Cena ·</b> crema de verduras + tortilla + tostada integral</p>
+    </div>
+    <div class="card daycard">
+      <span class="tag">🏊 Día de natación</span>
+      <p><b>Comida ·</b> verdura + quinoa + garbanzos</p>
+      <p><b>Cena ·</b> verduras al horno + merluza + yogur natural</p>
+    </div>
+    <div class="card daycard">
+      <span class="tag">💃 Día de sevillanas</span>
+      <p><b>Comida ·</b> lentejas con verduras (hidrato y proteína a la vez) + nueces</p>
+      <p><b>Cena ·</b> ensalada grande + pollo a la plancha + fruta</p>
+    </div>
+    <div class="card daycard">
+      <span class="tag">🛋️ Día de descanso</span>
+      <p><b>Comida ·</b> verdura + patata + ternera magra a la plancha</p>
+      <p><b>Cena ·</b> crema de verduras + pescado blanco + yogur natural</p>
+    </div>
+  </section>
+
+  <!-- ================= DESAYUNO ================= -->
+  <section class="panel" id="p-desayuno">
+    <div class="card">
+      <h3>La misma idea: base + proteína + fruta</h3>
+      <ul>
+        <li><b>Base:</b> avena, pan integral o tostada de centeno. Un poco más los días de deporte.</li>
+        <li><b>Proteína o grasa buena:</b> yogur natural o kéfir, huevo, queso fresco, unas lonchas de jamón cocido, pavo o pollo, o un puñado de nueces.</li>
+        <li><b>Fruta:</b> cualquiera de temporada. El plátano va muy bien después de nadar o de pesas.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Tres desayunos ya montados</h3>
+      <ul>
+        <li>Avena con yogur natural, nueces y fruta troceada.</li>
+        <li>Tostada integral con tomate + huevo duro + una pieza de fruta.</li>
+        <li>Kéfir con avena y plátano (ideal tras el deporte).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= SNACKS ================= -->
+  <section class="panel" id="p-snacks">
+    <div class="card">
+      <h3>Si entra hambre entre horas</h3>
+      <ul>
+        <li>🍏 Una pieza de fruta con un puñado de nueces o almendras.</li>
+        <li>🥛 Yogur natural o kéfir, o requesón con fruta troceada.</li>
+        <li>🥕 Palitos de zanahoria o pepino con hummus.</li>
+        <li>🍞 Tostada integral con tomate, o con aguacate.</li>
+        <li>🥪 Unas lonchas de jamón cocido, pavo o pollo (buena calidad, bajo en sal).</li>
+        <li>🍫 Un par de onzas de chocolate negro (70% o más).</li>
+        <li>🫒 Un puñadito de aceitunas (con moderación por la sal).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= CAPRICHOS ================= -->
+  <section class="panel" id="p-caprichos">
+    <div class="card treat">
+      <h3>Comer bien no es comer perfecto</h3>
+      <p>Un gusto a la semana ayuda a mantener el plan sin agobios, y no pasa nada por él.</p>
+      <ul>
+        <li>🍦 <b>Un helado</b> a la semana: sí, sin problema.</li>
+        <li>🍕 <b>Una hamburguesa o una pizza</b> a la semana: también, eligiendo una de las dos.</li>
+        <li>📌 <b>Truco:</b> resérvalo para un día fijo (por ejemplo el sábado) y el resto de la semana sigue la guía.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ================= NOTAS ================= -->
+  <section class="panel" id="p-notas">
+    <div class="card">
+      <h3>❤️ Para el colesterol</h3>
+      <ul>
+        <li><b>Pescado azul 2–3 veces por semana</b> por su omega-3.</li>
+        <li><b>Avena y legumbre casi a diario:</b> su fibra ayuda a bajar el colesterol.</li>
+        <li><b>Aceite de oliva como grasa principal</b> y un puñado de nueces la mayoría de los días.</li>
+        <li><b>Reducir:</b> embutidos, carnes grasas, quesos curados, bollería y fritos.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>🦋 Para la tiroides (versión general)</h3>
+      <ul>
+        <li>Col, brócoli y coliflor mejor <b>cocinados</b> que crudos en gran cantidad.</li>
+        <li><b>Soja con moderación</b> hasta saber si es hipo o hiper.</li>
+        <li>Pescado, huevo y lácteos ya aportan el <b>yodo</b> necesario.</li>
+        <li>1–2 <b>nueces de Brasil</b> al día aportan selenio, bueno para la tiroides.</li>
+        <li><b>Importante:</b> cuando el médico confirme el tipo, ajustamos la guía.</li>
+      </ul>
+    </div>
+    <div class="disclaimer">
+      Guía de alimentación saludable general adaptada a tus circunstancias. No sustituye a tu médico ni a un dietista-nutricionista, que pueden ajustar cantidades exactas según tu analítica y tu peso.
+    </div>
+  </section>
+
+</div>
+
+<!-- ================= RESULT BAR ================= -->
+<div class="result" id="result" hidden>
+  <div class="in">
+    <div class="t" id="resultTitle">Tu comida de hoy</div>
+    <div class="plate-line" id="plateLine"></div>
+    <div class="tip" id="plateTip"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var sel = {carb:null, prot:null, comp:null};
+  var day = 'fuerte';
+  var meal = 'comida';
+
+  // Meal toggle
+  var montarPanel = document.getElementById('p-montar');
+  document.querySelectorAll('#mealtoggle button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('#mealtoggle button').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      meal = b.dataset.m;
+      montarPanel.classList.toggle('cena', meal === 'cena');
+      render();
+    });
+  });
+
+  // Tabs
+  var tabs = document.querySelectorAll('.tab');
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){x.classList.remove('on');});
+      t.classList.add('on');
+      document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('on');});
+      document.getElementById('p-'+t.dataset.p).classList.add('on');
+      document.getElementById('result').hidden = (t.dataset.p !== 'montar') || !sel.carb && !sel.prot && !sel.comp;
+      window.scrollTo({top:0});
+    });
+  });
+
+  // Day toggle
+  var hint = document.getElementById('dayhint');
+  document.querySelectorAll('#daytoggle button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('#daytoggle button').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      day = b.dataset.d;
+      hint.innerHTML = (day === 'fuerte')
+        ? 'Día de deporte fuerte: hoy la ración de hidrato puede ser <b>más generosa</b>. 💪'
+        : 'Día suave: ración de hidrato <b>más pequeña</b> y más verdura. 💃';
+      hint.classList.remove('flash');
+      void hint.offsetWidth;
+      hint.classList.add('flash');
+      render();
+    });
+  });
+
+  // Chips
+  document.querySelectorAll('.chips').forEach(function(group){
+    var g = group.dataset.group;
+    group.querySelectorAll('.chip').forEach(function(chip){
+      chip.addEventListener('click', function(){
+        var was = chip.classList.contains('sel');
+        group.querySelectorAll('.chip').forEach(function(x){x.classList.remove('sel');});
+        if(was){ sel[g] = null; }
+        else { chip.classList.add('sel'); sel[g] = firstLine(chip); }
+        render();
+      });
+    });
+  });
+
+  function firstLine(chip){
+    var clone = chip.cloneNode(true);
+    var sm = clone.querySelector('small'); if(sm) sm.remove();
+    return clone.textContent.replace('★','').trim();
+  }
+
+  document.getElementById('reset').addEventListener('click', function(){
+    sel = {carb:null, prot:null, comp:null};
+    document.querySelectorAll('.chip').forEach(function(x){x.classList.remove('sel');});
+    render();
+  });
+
+  function render(){
+    var bar = document.getElementById('result');
+    var any = sel.carb || sel.prot || sel.comp;
+    var onMontar = document.getElementById('p-montar').classList.contains('on');
+    bar.hidden = !any || !onMontar;
+    if(!any) return;
+
+    document.getElementById('resultTitle').textContent = (meal === 'cena') ? 'Tu cena de hoy' : 'Tu comida de hoy';
+    var parts = ['🥗 Verdura'];
+    if(sel.carb) parts.push(sel.carb);
+    if(sel.prot) parts.push(sel.prot);
+    if(sel.comp) parts.push(sel.comp);
+    document.getElementById('plateLine').textContent = parts.join('  +  ');
+
+    var tip;
+    if(!sel.carb || !sel.prot){
+      tip = !sel.carb ? 'Te falta elegir el hidrato (paso 1).' : 'Te falta elegir la proteína (paso 2).';
+    } else if(meal === 'cena'){
+      var chipSel = document.querySelector('[data-group="carb"] .chip.sel');
+      var heavy = chipSel && chipSel.hasAttribute('data-heavy');
+      tip = heavy
+        ? '✅ Vale para cenar, pero en ración pequeña: ' + sel.carb.toLowerCase() + ' sienta mejor a mediodía.'
+        : '✅ Cena completa. Ración pequeña de hidrato y mucha verdura.';
+    } else if(day === 'fuerte'){
+      tip = 'Día de deporte: ración de ' + sel.carb.toLowerCase() + ' un poco más generosa. ✅ Comida completa.';
+    } else {
+      tip = 'Día suave: ración de ' + sel.carb.toLowerCase() + ' más pequeña y más verdura. ✅ Comida completa.';
+    }
+    document.getElementById('plateTip').textContent = tip;
+  }
+})();
+</script>
+</body>
+</html>
