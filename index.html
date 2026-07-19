@@ -92,10 +92,11 @@
   @keyframes pulse{0%{transform:scale(.97); opacity:.5;} 100%{transform:none; opacity:1;}}
 
   .chip[data-heavy]::after{content:""; display:none;}
-  .cena .chip[data-heavy]::after{
-    content:"☀️ mejor a mediodía"; display:block;
-    font-size:.72rem; color:var(--muted); margin-top:2px;
-  }
+  .cena .chip[data-heavy]{display:none;}
+  .chip[data-night]{display:none;}
+  .cena .chip[data-night]{display:inline-block;}
+  .cena-note{display:none; font-size:.82rem; color:var(--muted); margin:10px 0 0;}
+  .cena .cena-note{display:block;}
   .daytoggle button{
     flex:1; border:1.5px solid var(--line); background:#fff; border-radius:12px;
     padding:11px 8px; font:inherit; font-size:.88rem; font-weight:700; color:var(--muted); cursor:pointer;
@@ -163,6 +164,7 @@
     <button class="tab" data-p="desayuno">☕ Desayuno</button>
     <button class="tab" data-p="snacks">🍎 Snacks</button>
     <button class="tab" data-p="caprichos">🍕 Caprichos</button>
+    <button class="tab" data-p="saber">📚 Saber más</button>
     <button class="tab" data-p="notas">📋 Mis notas</button>
   </nav>
 
@@ -193,7 +195,12 @@
         <button class="chip">Quinoa</button>
         <button class="chip">Patata o boniato<small>cocido o al horno</small></button>
         <button class="chip">Pan integral<small>1 rebanada</small></button>
+        <button class="chip">Calabaza o zanahoria asada<small>hidrato ligero · ideal de noche</small></button>
+        <button class="chip" data-night="1">Ensalada grande<small>lechuga, tomate, cebolla, endivia…</small></button>
+        <button class="chip" data-night="1">Gazpacho<small>en verano, cena fresquita</small></button>
+        <button class="chip" data-night="1">Crema de verduras<small>calabacín, puerro…</small></button>
       </div>
+      <p class="cena-note">🌙 De noche te enseño solo opciones ligeras (y alguna ensalada extra que de día no sale aquí). Legumbres, arroz y pasta, mejor a mediodía.</p>
     </div>
 
     <div class="step s-prot">
@@ -207,7 +214,7 @@
         <button class="chip">Pollo o pavo<small>sin piel</small></button>
         <button class="chip">Conejo</button>
         <button class="chip">Ternera magra<small>máx. 1 vez por semana</small></button>
-        <button class="chip">Fiambre en lonchas<small>jamón cocido, pavo o pollo · buena calidad, bajo en sal</small></button>
+        <button class="chip">Fiambre en lonchas<small>jamón cocido, pavo o pollo · buena calidad · máx. 2-3 veces/semana</small></button>
         <button class="chip">Tofu<small>con moderación</small></button>
         <button class="chip">Marisco<small>de vez en cuando</small></button>
       </div>
@@ -251,6 +258,26 @@
       <span class="tag">🛋️ Día de descanso</span>
       <p><b>Comida ·</b> verdura + patata + ternera magra a la plancha</p>
       <p><b>Cena ·</b> crema de verduras + pescado blanco + yogur natural</p>
+    </div>
+    <div class="card daycard">
+      <span class="tag">💪 Día de pesas · otra idea</span>
+      <p><b>Comida ·</b> pasta integral salteada con verduras y atún + fruta</p>
+      <p><b>Cena ·</b> puré de calabacín + pavo a la plancha + queso fresco</p>
+    </div>
+    <div class="card daycard">
+      <span class="tag">🏊 Día de natación · otra idea</span>
+      <p><b>Comida ·</b> potaje de alubias con espinacas + fruta</p>
+      <p><b>Cena ·</b> ensalada + sardinas a la plancha + rebanada de pan integral</p>
+    </div>
+    <div class="card daycard">
+      <span class="tag">💃 Día de sevillanas · otra idea</span>
+      <p><b>Comida ·</b> verdura + patata pequeña + pollo al horno + nueces</p>
+      <p><b>Cena ·</b> gazpacho + ensalada con huevo duro + yogur natural</p>
+    </div>
+    <div class="card daycard">
+      <span class="tag">🛋️ Día de descanso · otra idea</span>
+      <p><b>Comida ·</b> garbanzos salteados con verduras + fruta</p>
+      <p><b>Cena ·</b> verdura + merluza al horno con limón + queso fresco</p>
     </div>
   </section>
 
@@ -303,8 +330,81 @@
     </div>
   </section>
 
+  <!-- ================= SABER MÁS ================= -->
+  <section class="panel" id="p-saber">
+    <div class="card">
+      <h3>🧩 Los tres grandes grupos</h3>
+      <p>Casi todo lo que comemos aporta una mezcla de tres nutrientes principales, cada uno con su trabajo:</p>
+      <ul>
+        <li>🌾 <b>Hidratos de carbono:</b> la gasolina. Dan energía para moverte, bailar y nadar. <span class="mut">Ej.: pan, arroz, patata, lentejas, fruta.</span></li>
+        <li>🥚 <b>Proteínas:</b> los ladrillos. Construyen y reparan el músculo, la piel y los huesos. <span class="mut">Ej.: pescado, huevo, pollo, garbanzos, yogur.</span></li>
+        <li>🫒 <b>Grasas:</b> el aceite del motor. Necesarias para el cerebro, las hormonas y absorber vitaminas. <span class="mut">Ej.: aceite de oliva, nueces, aguacate, salmón.</span></li>
+      </ul>
+      <p class="mut">Ninguno es el malo de la película: la clave es elegir la versión buena de cada uno y en su cantidad.</p>
+    </div>
+
+    <div class="card">
+      <h3>🌾 Hidratos: elige los que llenan y cuidan</h3>
+      <p>Los hay de dos tipos. Los <b>integrales y con fibra</b> ✅ (avena, legumbre, arroz y pan integral, patata cocida) sueltan la energía poco a poco: sacian más y ayudan con el colesterol. Los <b>refinados</b> ⚠️ (pan blanco, bollería, galletas, azúcar) dan un subidón corto y hambre pronto.</p>
+      <p class="mut">Ejemplo práctico: un bol de avena con fruta te aguanta toda la mañana; un cruasán, una hora.</p>
+      <p class="mut">Por eso en la app todos los hidratos son integrales o naturales. La cantidad depende de tu día: más si hay deporte, menos si es día tranquilo.</p>
+    </div>
+
+    <div class="card">
+      <h3>🥚 Proteínas: tu seguro de músculo</h3>
+      <p>A partir de los 60 el cuerpo pierde músculo si no se lo impides, y las armas son dos: <b>ejercicio de fuerza</b> (¡tus pesas!) y <b>proteína en cada comida</b>, no solo en una.</p>
+      <p>Las hay <b>animales</b> 🐟 (pescado, huevo, carne magra, lácteos) y <b>vegetales</b> 🌱 (legumbres, tofu, frutos secos). Truco de siempre: la legumbre con un cereal forma una proteína tan completa como la de la carne. <span class="mut">Ej.: lentejas con arroz, garbanzos con pan, o el clásico potaje.</span></p>
+    </div>
+
+    <div class="card">
+      <h3>🫒 Grasas: hay buenas y menos buenas</h3>
+      <p>Las <b>buenas</b> ✅ están en el aceite de oliva, los frutos secos, el aguacate y el pescado azul: ayudan al corazón y a mejorar el colesterol. Las que conviene <b>reducir</b> ⚠️ son las saturadas de embutidos, carnes grasas, quesos muy curados, bollería y fritos.</p>
+      <p class="mut">Ejemplo práctico: mejor un puñado de nueces de media tarde que unas galletas, aunque las nueces tengan más calorías: la calidad de la grasa importa más que la cantidad.</p>
+      <p class="mut">Ojo: quitar toda la grasa es un error clásico. Sin grasas buenas, el colesterol no mejora y la comida no sacia.</p>
+    </div>
+
+    <div class="card">
+      <h3>🧵 La fibra, tu aliada silenciosa</h3>
+      <p>Es la parte del vegetal que no se digiere, y justo por eso funciona: la <b>fibra soluble</b> (avena, legumbres, manzana, cítricos) forma un gel en el intestino que <b>arrastra parte del colesterol</b> antes de que pase a la sangre. Además regula el tránsito y alimenta a las bacterias buenas del intestino.</p>
+      <p class="mut">Ejemplo práctico: por eso en la app la avena y las legumbres llevan ★ — son tus dos mejores herramientas contra el colesterol.</p>
+    </div>
+
+    <div class="card">
+      <h3>🍽️ Cómo se combina todo</h3>
+      <p>La fórmula de cada comida es siempre la misma, y es la que sigue la app:</p>
+      <ul>
+        <li>🥗 <b>Medio plato de verdura</b> → vitaminas, minerales, fibra y saciedad.</li>
+        <li>🌾 <b>Un cuarto de hidrato integral</b> → energía según tu día.</li>
+        <li>🍗 <b>Un cuarto de proteína</b> → músculo y saciedad.</li>
+        <li>🫒 <b>Aceite de oliva</b> para aliñar y 🍎 <b>fruta o lácteo</b> para rematar.</li>
+      </ul>
+      <p class="mut">Si un plato cumple esto, es un buen plato: da igual que sea lunes o jueves, comida o cena.</p>
+    </div>
+
+    <div class="card">
+      <h3>🌈 Y las vitaminas ¿dónde están?</h3>
+      <p>Repartidas por colores: cada color de fruta y verdura aporta cosas distintas. El truco no es memorizar nada, sino que <b>a lo largo de la semana tu cesta tenga muchos colores</b>:</p>
+      <ul>
+        <li>🟢 <b>Verde</b> (espinacas, brócoli): hierro, folato y vista.</li>
+        <li>🔴 <b>Rojo</b> (tomate, pimiento): licopeno para el corazón.</li>
+        <li>🟠 <b>Naranja</b> (zanahoria, calabaza): betacaroteno para piel y ojos.</li>
+        <li>🟣 <b>Morado</b> (berenjena, uvas): antioxidantes para las arterias.</li>
+      </ul>
+      <p class="mut">A tu edad interesan especialmente el <b>calcio</b> (lácteos, almendras) y la <b>vitamina D</b> (pescado azul, huevo y un paseo al sol) para los huesos.</p>
+    </div>
+  </section>
+
   <!-- ================= NOTAS ================= -->
   <section class="panel" id="p-notas">
+    <div class="card">
+      <h3>💪 Para el músculo (¡importante a los 63!)</h3>
+      <ul>
+        <li><b>Proteína en las 3 comidas del día</b>, no solo en una: es la clave para no perder músculo con la edad.</li>
+        <li>Los días de pesas o natación, <b>come algo con proteína en la hora u hora y media después</b> de entrenar (vale un yogur con nueces si no toca comida).</li>
+        <li>La cena de los días de entrenamiento <b>no debe ser escasa:</b> proteína completa e hidrato moderado para recuperar.</li>
+        <li><b>Bebe agua</b> antes, durante y después del ejercicio: con la edad la sensación de sed avisa menos.</li>
+      </ul>
+    </div>
     <div class="card">
       <h3>❤️ Para el colesterol</h3>
       <ul>
@@ -354,6 +454,10 @@
       b.classList.add('on');
       meal = b.dataset.m;
       montarPanel.classList.toggle('cena', meal === 'cena');
+      var hiddenSel = document.querySelector(meal === 'cena'
+        ? '[data-group="carb"] .chip.sel[data-heavy]'
+        : '[data-group="carb"] .chip.sel[data-night]');
+      if(hiddenSel){ hiddenSel.classList.remove('sel'); sel.carb = null; }
       render();
     });
   });
@@ -434,9 +538,20 @@
     } else if(meal === 'cena'){
       var chipSel = document.querySelector('[data-group="carb"] .chip.sel');
       var heavy = chipSel && chipSel.hasAttribute('data-heavy');
-      tip = heavy
-        ? '✅ Vale para cenar, pero en ración pequeña: ' + sel.carb.toLowerCase() + ' sienta mejor a mediodía.'
-        : '✅ Cena completa. Ración pequeña de hidrato y mucha verdura.';
+      if(day === 'fuerte'){
+        var nightSel = chipSel && chipSel.hasAttribute('data-night');
+        if(nightSel){
+          tip = '✅ Muy ligera. Como hoy has entrenado, acompáñala con un poco de pan integral o patata para recuperar.';
+        } else {
+          tip = heavy
+            ? '✅ Has entrenado hoy: vale como cena de recuperación en ración moderada, aunque ' + sel.carb.toLowerCase() + ' sienta mejor a mediodía.'
+            : '✅ Cena de recuperación: hidrato moderado y buena ración de proteína para el músculo.';
+        }
+      } else {
+        tip = heavy
+          ? '✅ Vale para cenar, pero en ración pequeña: ' + sel.carb.toLowerCase() + ' sienta mejor a mediodía.'
+          : '✅ Cena completa. Ración pequeña de hidrato y mucha verdura.';
+      }
     } else if(day === 'fuerte'){
       tip = 'Día de deporte: ración de ' + sel.carb.toLowerCase() + ' un poco más generosa. ✅ Comida completa.';
     } else {
