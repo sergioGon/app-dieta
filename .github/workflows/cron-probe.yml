@@ -1,12 +1,13 @@
-name: cron probe (temporal, diagnostico ronda 2)
+name: cron probe (temporal, diagnostico)
 
-# Re-test 2026-07-31: la primera ronda solo espero 49 min, dentro del rango de
-# retraso de registro conocido, asi que su resultado no era concluyente. Esta
-# vez la ventana es >60 min. Se borra al acabar.
+# Reconfigurada 2026-07-31 tras red-team: horaria a minuto valle (:29), no */5
+# (los eventos schedule pueden descartarse bajo carga y */5 es lo mas expuesto).
+# CONGELADA hasta 2026-08-03: cada edicion re-registra el workflow y reinicia
+# el reloj del planificador (#185373). NO editar, NO borrar hasta veredicto.
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "29 * * * *"
   workflow_dispatch:
 
 jobs:
