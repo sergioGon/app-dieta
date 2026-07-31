@@ -1,0 +1,19 @@
+name: cron probe (temporal, diagnostico ronda 2)
+
+# Re-test 2026-07-31: la primera ronda solo espero 49 min, dentro del rango de
+# retraso de registro conocido, asi que su resultado no era concluyente. Esta
+# vez la ventana es >60 min. Se borra al acabar.
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: |
+          echo "event=${{ github.event_name }}"
+          date -u +%FT%TZ
